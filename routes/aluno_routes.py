@@ -1,4 +1,4 @@
-from alunos.aluno_model import listar, obter, salvar, alterar, excluir
+from model.aluno_model import listar, obter, salvar, alterar, excluir
 from flask import Blueprint, jsonify, request
 from config import db
 

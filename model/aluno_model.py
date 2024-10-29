@@ -15,7 +15,6 @@ class Aluno(db.Model):
     def to_dic(self):
         return {"id": self.id, "nome": self.nome, "endereco": self.endereco, "turma_id": self.turma_id, "turma_nome":  self.turma.nome if self.turma else None}
     
-
 def obter(id):
     aluno = Aluno.query.get(id)
     return aluno.to_dic()

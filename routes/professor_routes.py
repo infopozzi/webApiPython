@@ -1,4 +1,4 @@
-from professor.professor_model import listar, obter, salvar, alterar, excluir
+from model.professor_model import listar, obter, salvar, alterar, excluir
 from flask import Blueprint, jsonify, request
 from config import db
 

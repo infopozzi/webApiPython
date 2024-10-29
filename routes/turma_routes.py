@@ -1,4 +1,4 @@
-from turma.turma_model import listar, obter, salvar, alterar, excluir
+from model.turma_model import listar, obter, salvar, alterar, excluir
 from flask import Blueprint, jsonify, request
 from config import db
 
