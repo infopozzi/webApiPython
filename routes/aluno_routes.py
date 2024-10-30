@@ -1,29 +1,39 @@
-from model.aluno_model import listar, obter, salvar, alterar, excluir
+from model.aluno_model import listar, obter, salvar, alterar, excluir,AlunoNaoEncontrado
 from flask import Blueprint, jsonify, request
 from config import db
 
 aluno_blueprint = Blueprint("aluno", __name__)
 
-@aluno_blueprint.route("/obter/<int:id>")
+@aluno_blueprint.route("/obter/<int:id>", methods= ["GET"])
 def obter_aluno(id):
-    return jsonify(obter(id)), 200
+    try: 
+        aluno = obter(id)
+        return jsonify(aluno), 200
+    except AlunoNaoEncontrado: 
+        return jsonify({'message': 'Aluno não encontrado.'}), 404 
 
 @aluno_blueprint.route("/listar", methods= ["GET"])
 def listar_alunos():
     return jsonify(listar()), 200
 
-@aluno_blueprint.route("/salvar", methods= ["POST"])
+@aluno_blueprint.route("/salvar", methods= ["PUT","POST"])
 def salvar_aluno():
-    aluno = request.json
-    if (aluno["id"] > 0):
-        alterar(aluno)
-        return jsonify({ "message": "Aluno alterado com sucesso."}), 200
-    else: 
-        salvar(aluno)
-        return jsonify({ "message": "Aluno salvo com sucesso." }), 200
+    try:
+        aluno = request.json
+        if (aluno["id"] > 0):
+            alterar(aluno)
+            return jsonify({ "message": "Aluno alterado com sucesso."}), 200
+        else: 
+            salvar(aluno)
+            return jsonify({ "message": "Aluno cadastrado com sucesso." }), 200
+    except AlunoNaoEncontrado:
+        return jsonify({ "message": "Aluno não encontrado." }), 404    
     
-@aluno_blueprint.route("/excluir", methods= ["POST"])
+@aluno_blueprint.route("/excluir", methods= ["DELETE","POST"])
 def excluir_aluno():
-    aluno = request.json
-    excluir(aluno["id"])
-    return jsonify({ "message": "Aluno excluído com sucesso." }), 200
+    try:
+        aluno = request.json
+        excluir(aluno["id"])
+        return jsonify({ "message": "Aluno excluído com sucesso." }), 200
+    except AlunoNaoEncontrado:
+        return jsonify({ "message": "Aluno não encontrado." }), 404    

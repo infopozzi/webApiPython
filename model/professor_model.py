@@ -4,36 +4,51 @@ class Professor(db.Model):
     __tablename__ = 'professores'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100))
-    endereco = db.Column(db.String(200))
+    idade = db.Column(db.Integer)
+    materia = db.Column(db.String(100))
+    observacao = db.Column(db.String(200))
     turmas = db.relationship('Turma', backref='professor', lazy=True)
 
-    def __init__(self, nome, endereco):
+    def __init__(self, nome, idade, materia, observacao):
         self.nome = nome
-        self.endereco = endereco
+        self.idade = idade
+        self.materia = materia
+        self.observacao = observacao
 
     def to_dic(self):
-        return {"id": self.id, "nome": self.nome, "endereco": self.endereco}
+        return {"id": self.id, "nome": self.nome, "idade": self.idade, "materia": self.materia, "observacao": self.observacao}
+    
+class ProfessorNaoEncontrado(Exception):
+    pass
     
 def obter(id):
     professor = Professor.query.get(id)
+    if not professor:
+        raise ProfessorNaoEncontrado
     return professor.to_dic()
 
 def listar():
     professores = Professor.query.all()
     return [professor.to_dic() for professor in professores]
 
-def salvar(dic_professor):
-    professor = Professor(nome = dic_professor["nome"], endereco = dic_professor["endereco"] )
+def salvar(dic):
+    professor = Professor(nome = dic["nome"], idade = dic["idade"], materia = dic["materia"], observacao = dic["observacao"] )
     db.session.add(professor)
     db.session.commit()
 
-def alterar(dic_professor):
-    professor = Professor.query.get(dic_professor["id"])
-    professor.nome = dic_professor["nome"]
-    professor.endereco = dic_professor["endereco"]
+def alterar(dic):
+    professor = Professor.query.get(dic["id"])
+    if not professor:
+        raise ProfessorNaoEncontrado
+    professor.nome = dic["nome"]
+    professor.idade = dic["idade"]
+    professor.materia = dic["materia"]
+    professor.observacao = dic["observacao"]
     db.session.commit()
 
 def excluir(id):
     professor = Professor.query.get(id)
+    if not professor:
+        raise ProfessorNaoEncontrado
     db.session.delete(professor)
     db.session.commit()
