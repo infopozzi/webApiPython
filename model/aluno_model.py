@@ -14,8 +14,8 @@ class Aluno(db.Model):
         self.nome = nome
         self.data_nascimento = data_nascimento
         self.turma_id = turma_id
-        self.nota_primeiro_semestre = nota_primeiro_semestre 
-        self.nota_segundo_semestre = nota_segundo_semestre
+        self.nota_primeiro_semestre = nota_primeiro_semestre if nota_primeiro_semestre else 0 
+        self.nota_segundo_semestre = nota_segundo_semestre if nota_segundo_semestre else 0
 
     @property
     def idade(self):        
@@ -64,8 +64,8 @@ def alterar(dic):
     data_formatada = datetime.strptime(dic["data_nascimento"], "%Y-%m-%d").date()
     aluno.data_nascimento = data_formatada
     aluno.turma_id = dic["turma_id"]
-    aluno.nota_primeiro_semestre = dic["nota_primeiro_semestre"]
-    aluno.nota_segundo_semestre = dic["nota_segundo_semestre"]
+    aluno.nota_primeiro_semestre = dic["nota_primeiro_semestre"] if dic["nota_primeiro_semestre"] else 0
+    aluno.nota_segundo_semestre = dic["nota_segundo_semestre"] if dic["nota_segundo_semestre"] else 0
     db.session.commit()
 
 def excluir(id):
