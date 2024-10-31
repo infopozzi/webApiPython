@@ -14,7 +14,7 @@ class Turma(db.Model):
         self.ativo = ativo
         
     def to_dic(self):
-        return {"id": self.id, "descricao": self.descricao, "ativo": self.ativo, "professor_nome": self.professor.nome if self.professor else None}
+        return {"id": self.id, "descricao": self.descricao, "ativo": self.ativo, "professor_id": self.professor_id, "professor_nome": self.professor.nome if self.professor else None}
 
 class TurmaNaoEncontado(Exception):
     pass
