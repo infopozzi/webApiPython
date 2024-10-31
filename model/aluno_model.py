@@ -27,15 +27,19 @@ class Aluno(db.Model):
         return idade_
     
     @property
-    def data_nascimento_(self):
+    def data_nascimento_en_us(self):
         return self.data_nascimento.strftime("%Y-%m-%d") if self.data_nascimento else ""
 
+    @property
+    def data_nascimento_pt_br(self):
+        return self.data_nascimento.strftime("%d/%m/%Y")
+    
     @property
     def media_final(self):
         return (self.nota_primeiro_semestre + self.nota_segundo_semestre) /2
 
     def to_dic(self):
-        return {"id": self.id, "nome": self.nome, "idade": self.idade, "data_nascimento": self.data_nascimento.strftime("%d/%m/%Y"), "data_nascimento_": self.data_nascimento_,"turma_id": self.turma_id, "turma_nome":  self.turma.descricao, "nota_primeiro_semestre": self.nota_primeiro_semestre, "nota_segundo_semestre": self.nota_segundo_semestre, "media_final": self.media_final}
+        return {"id": self.id, "nome": self.nome, "idade": self.idade, "data_nascimento_pt_br": self.data_nascimento_pt_br, "data_nascimento_en_us": self.data_nascimento_en_us,"turma_id": self.turma_id, "turma_nome":  self.turma.descricao, "nota_primeiro_semestre": self.nota_primeiro_semestre, "nota_segundo_semestre": self.nota_segundo_semestre, "media_final": self.media_final}
 
 class AlunoNaoEncontrado(Exception):
     pass
