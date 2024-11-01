@@ -2,11 +2,11 @@ from config import db
 from datetime import datetime
 
 class Aluno(db.Model):
-    __tablename__ = 'alunos'
+    __tablename__ = 'aluno'
     id = db.Column(db.Integer, primary_key=True)
     nome = db.Column(db.String(100))   
     data_nascimento = db.Column(db.Date)
-    turma_id = db.Column(db.Integer, db.ForeignKey('turmas.id'))
+    turma_id = db.Column(db.Integer, db.ForeignKey('turma.id'))
     nota_primeiro_semestre = db.Column(db.Float)
     nota_segundo_semestre = db.Column(db.Float)
 

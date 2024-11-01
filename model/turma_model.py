@@ -1,11 +1,11 @@
 from config import db
 
 class Turma(db.Model):
-    __tablename__ = 'turmas'
+    __tablename__ = 'turma'
     id = db.Column(db.Integer, primary_key=True)
     descricao = db.Column(db.String(200))
     ativo = db.Column(db.Boolean)    
-    professor_id = db.Column(db.Integer, db.ForeignKey('professores.id'))
+    professor_id = db.Column(db.Integer, db.ForeignKey('professor.id'))
     alunos = db.relationship('Aluno', backref='turma', lazy=True)
 
     def __init__(self, descricao, professor_id, ativo):
