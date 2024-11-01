@@ -16,16 +16,24 @@ def obter_turma(id):
 def listar_turma():
     return jsonify(listar()), 200
 
-@turma_blueprint.route("/salvar", methods= ["PUT","POST"])
+@turma_blueprint.route("/salvar", methods= ["POST"])
 def salvar_turma():
+    try:
+        turma = request.json
+        salvar(turma)
+        return jsonify({ "message": "Turma cadastrada com sucesso." }), 200
+    except TurmaNaoEncontado as e:
+        return jsonify({ "message":str(e) }), 404
+    
+@turma_blueprint.route("/alterar", methods= ["PUT","POST"])
+def alterar_turma():
     try:
         turma = request.json
         if (turma["id"] > 0):
             alterar(turma)
             return jsonify({ "message": "Turma alterado com sucesso."}), 200
         else: 
-            salvar(turma)
-            return jsonify({ "message": "Turma cadastrada com sucesso." }), 200
+            return jsonify({ "message": "Id da Turma inválido." }), 200
     except TurmaNaoEncontado as e:
         return jsonify({ "message":str(e) }), 404
     

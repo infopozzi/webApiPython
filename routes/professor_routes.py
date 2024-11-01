@@ -16,16 +16,24 @@ def obter_professor(id):
 def listar_professor():
     return jsonify(listar()), 200
 
-@professor_blueprint.route("/salvar", methods= ["PUT","POST"])
+@professor_blueprint.route("/salvar", methods= ["POST"])
 def salvar_professor():
+    try:
+        professor = request.json
+        salvar(professor)
+        return jsonify({ "message": "Professor cadastrado com sucesso." }), 200
+    except ProfessorNaoEncontrado as e:
+        return jsonify({ "message": str(e) }), 404
+    
+@professor_blueprint.route("/alterar", methods= ["PUT","POST"])
+def alterar_professor():
     try:
         professor = request.json
         if (professor["id"] > 0):
             alterar(professor)
             return jsonify({ "message": "Professor alterado com sucesso."}), 200
         else: 
-            salvar(professor)
-            return jsonify({ "message": "Professor cadastrado com sucesso." }), 200
+            return jsonify({ "message": "Id do professor inválido." }), 404
     except ProfessorNaoEncontrado as e:
         return jsonify({ "message": str(e) }), 404
     
