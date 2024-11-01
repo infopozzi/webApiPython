@@ -9,8 +9,8 @@ def obter_turma(id):
     try:
         turma = obter(id)
         return jsonify(turma), 200
-    except TurmaNaoEncontado:
-        return jsonify({ "message": "Turma não encontrado."}), 404
+    except TurmaNaoEncontado as e:
+        return jsonify({ "message": str(e) }), 404
 
 @turma_blueprint.route("/listar", methods= ["GET"])
 def listar_turma():
@@ -26,8 +26,8 @@ def salvar_turma():
         else: 
             salvar(turma)
             return jsonify({ "message": "Turma cadastrada com sucesso." }), 200
-    except TurmaNaoEncontado:
-        return jsonify({ "message": "Turma não encontrado."}), 404
+    except TurmaNaoEncontado as e:
+        return jsonify({ "message":str(e) }), 404
     
 @turma_blueprint.route("/excluir", methods= ["DELETE","POST"])
 def excluir_turma():
@@ -35,5 +35,5 @@ def excluir_turma():
         turma = request.json
         excluir(turma["id"])
         return jsonify({ "message": "Turma excluído com sucesso." }), 200
-    except TurmaNaoEncontado:
-        return jsonify({ "message": "Turma não encontrado."}), 404
+    except TurmaNaoEncontado as e:
+        return jsonify({ "message": str(e) }), 404

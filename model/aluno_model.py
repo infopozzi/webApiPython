@@ -28,18 +28,25 @@ class Aluno(db.Model):
     
     @property
     def data_nascimento_en_us(self):
-        return self.data_nascimento.strftime("%Y-%m-%d") if self.data_nascimento else ""
+        return self.data_nascimento.strftime("%Y-%m-%d")
 
     @property
     def data_nascimento_pt_br(self):
         return self.data_nascimento.strftime("%d/%m/%Y")
     
     @property
+    def turma_descricao(self):
+        if (self.turma != None):
+            return self.turma.descricao
+        else:
+            return ""
+    
+    @property
     def media_final(self):
         return (self.nota_primeiro_semestre + self.nota_segundo_semestre) /2
 
     def to_dic(self):
-        return {"id": self.id, "nome": self.nome, "idade": self.idade, "data_nascimento_pt_br": self.data_nascimento_pt_br, "data_nascimento_en_us": self.data_nascimento_en_us,"turma_id": self.turma_id, "turma_nome":  self.turma.descricao, "nota_primeiro_semestre": self.nota_primeiro_semestre, "nota_segundo_semestre": self.nota_segundo_semestre, "media_final": self.media_final}
+        return {"id": self.id, "nome": self.nome, "idade": self.idade, "data_nascimento_pt_br": self.data_nascimento_pt_br, "data_nascimento_en_us": self.data_nascimento_en_us,"turma_id": self.turma_id, "turma_nome":  self.turma_descricao, "nota_primeiro_semestre": self.nota_primeiro_semestre, "nota_segundo_semestre": self.nota_segundo_semestre, "media_final": self.media_final}
 
 class AlunoNaoEncontrado(Exception):
     pass
@@ -47,7 +54,7 @@ class AlunoNaoEncontrado(Exception):
 def obter(id):
     aluno = Aluno.query.get(id)
     if not aluno:
-        raise
+        raise AlunoNaoEncontrado(f"Aluno com ID {id} não foi encontrado.")
     return aluno.to_dic()
 
 def listar():
@@ -63,7 +70,7 @@ def salvar(dic):
 def alterar(dic):
     aluno = Aluno.query.get(dic["id"])
     if not aluno:
-        raise
+        raise AlunoNaoEncontrado(f"Aluno com ID {id} não foi encontrado.")
     aluno.nome = dic["nome"]
     data_formatada = datetime.strptime(dic["data_nascimento"], "%Y-%m-%d").date()
     aluno.data_nascimento = data_formatada
@@ -75,6 +82,6 @@ def alterar(dic):
 def excluir(id):
     aluno = Aluno.query.get(id)
     if not aluno:
-        raise
+        raise AlunoNaoEncontrado(f"Aluno com ID {id} não foi encontrado.")
     db.session.delete(aluno)
     db.session.commit()

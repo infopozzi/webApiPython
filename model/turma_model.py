@@ -22,7 +22,7 @@ class TurmaNaoEncontado(Exception):
 def obter(id):
     turma = Turma.query.get(id)
     if not turma:
-        raise TurmaNaoEncontado
+        raise TurmaNaoEncontado(f"Turma com ID {id} não foi encontrado.")
     return turma.to_dic()
 
 def listar():
@@ -32,14 +32,14 @@ def listar():
 def salvar(dic):
     turma = Turma(descricao = dic["descricao"], ativo = dic["ativo"], professor_id = dic["professor_id"])
     if not turma:
-        raise TurmaNaoEncontado
+        raise TurmaNaoEncontado(f"Turma com ID {id} não foi encontrado.")
     db.session.add(turma)
     db.session.commit()
 
 def alterar(dic):
     turma = Turma.query.get(dic["id"])
     if not turma:
-        raise TurmaNaoEncontado
+        raise TurmaNaoEncontado(f"Turma com ID {id} não foi encontrado.")
     turma.descricao = dic["descricao"]
     turma.ativo = dic["ativo"]
     turma.professor_id = dic["professor_id"]
@@ -48,6 +48,6 @@ def alterar(dic):
 def excluir(id):
     turma = Turma.query.get(id)
     if not turma:
-        raise TurmaNaoEncontado
+        raise TurmaNaoEncontado(f"Turma com ID {id} não foi encontrado.")
     db.session.delete(turma)
     db.session.commit()

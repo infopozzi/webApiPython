@@ -9,8 +9,8 @@ def obter_professor(id):
     try:
         professor = obter(id)
         return jsonify(professor), 200
-    except ProfessorNaoEncontrado:
-        return jsonify({ "message": "Professor não encontrado."}), 404
+    except ProfessorNaoEncontrado as e:
+        return jsonify({ "message": str(e)} ), 404
 
 @professor_blueprint.route("/listar", methods= ["GET"])
 def listar_professor():
@@ -26,8 +26,8 @@ def salvar_professor():
         else: 
             salvar(professor)
             return jsonify({ "message": "Professor cadastrado com sucesso." }), 200
-    except ProfessorNaoEncontrado:
-        return jsonify({ "message": "Professor não encontrado."}), 404
+    except ProfessorNaoEncontrado as e:
+        return jsonify({ "message": str(e) }), 404
     
 @professor_blueprint.route("/excluir", methods= ["DELETE","POST"])
 def excluir_professor():
@@ -35,7 +35,7 @@ def excluir_professor():
         professor = request.json
         excluir(professor["id"])
         return jsonify({ "message": "Professor excluído com sucesso." }), 200
-    except ProfessorNaoEncontrado:
-        return jsonify({ "message": "Professor não encontrado."}), 404
+    except ProfessorNaoEncontrado as e:
+        return jsonify({ "message": str(e) }), 404
 
 

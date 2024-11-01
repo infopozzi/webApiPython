@@ -24,7 +24,7 @@ class ProfessorNaoEncontrado(Exception):
 def obter(id):
     professor = Professor.query.get(id)
     if not professor:
-        raise ProfessorNaoEncontrado
+        raise ProfessorNaoEncontrado(f"Professor com ID {id} não foi encontrado.")
     return professor.to_dic()
 
 def listar():
@@ -39,7 +39,7 @@ def salvar(dic):
 def alterar(dic):
     professor = Professor.query.get(dic["id"])
     if not professor:
-        raise ProfessorNaoEncontrado
+        raise ProfessorNaoEncontrado(f"Professor com ID {id} não foi encontrado.")
     professor.nome = dic["nome"]
     professor.idade = dic["idade"]
     professor.materia = dic["materia"]
@@ -49,6 +49,6 @@ def alterar(dic):
 def excluir(id):
     professor = Professor.query.get(id)
     if not professor:
-        raise ProfessorNaoEncontrado
+        raise ProfessorNaoEncontrado(f"Professor com ID {id} não foi encontrado.")
     db.session.delete(professor)
     db.session.commit()
